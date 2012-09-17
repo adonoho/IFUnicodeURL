@@ -380,7 +380,9 @@ static int doKCDecompose( const DWORD * input, int input_size,
 *
 **********************************************************************************/
 
-static int doKCCompose( DWORD * output, int * output_size ) 
+#ifndef __clang_analyzer__ // Silence the analyzer. Yes, we are moving to the ICU nameprep.
+
+static int doKCCompose( DWORD * output, int * output_size )
 {
   DWORD startCh;
   QWORD qwPair;
@@ -458,6 +460,7 @@ static int doKCCompose( DWORD * output, int * output_size )
   return XCODE_SUCCESS;
 }
 
+#endif
 
 /*********************************************************************************
 *
