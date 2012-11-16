@@ -1,4 +1,8 @@
 //  Created by Sean Heber on 4/22/10.
+#if !__has_feature(objc_arc)
+#  warning Please compile this class with ARC (-fobjc-arc).
+#endif
+
 #import "NSURL+IFUnicodeURL.h"
 #import "IDNSDK/xcode.h"
 
@@ -50,13 +54,13 @@ static NSString *ConvertUnicodeDomainString(NSString *hostname, BOOL toAscii)
 		UCHAR8 outputString[outputLength];
 		
 		if (XCODE_SUCCESS == Xcode_DomainToASCII(inputString, inputLength, outputString, &outputLength)) {
-			hostname = [[[NSString alloc] initWithBytes:outputString length:outputLength encoding:NSASCIIStringEncoding] autorelease];
+			hostname = [NSString.alloc initWithBytes:outputString length:outputLength encoding:NSASCIIStringEncoding];
 		}
 	} else {
 		int outputLength = MAX_DOMAIN_SIZE_16;
 		UTF16CHAR outputString[outputLength];
 		if (XCODE_SUCCESS == Xcode_DomainToUnicode16(inputString, inputLength, outputString, &outputLength)) {
-			hostname = [[[NSString alloc] initWithCharacters:outputString length:outputLength] autorelease];
+			hostname = [NSString.alloc initWithCharacters:outputString length:outputLength];
 		}
 	}
 	
@@ -65,7 +69,7 @@ static NSString *ConvertUnicodeDomainString(NSString *hostname, BOOL toAscii)
 
 static NSString *ConvertUnicodeURLString(NSString *str, BOOL toAscii)
 {
-	NSMutableArray *urlParts = [[NSMutableArray new] autorelease];
+	NSMutableArray *urlParts = NSMutableArray.new;
 	NSString *hostname = nil;
 	NSArray *parts = nil;
 	
@@ -96,11 +100,11 @@ static NSString *ConvertUnicodeURLString(NSString *str, BOOL toAscii)
 	// NSURL doesn't normally do anything like this, but I found it useful for my purposes to put it in here.
 	NSString *afterHostname = [[urlParts objectAtIndex:4] stringByAppendingString:[urlParts objectAtIndex:2]];
 	CFStringRef cleanedAfterHostname = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault, (CFStringRef)afterHostname, CFSTR(""), kCFStringEncodingUTF8);
-	NSString *processedAfterHostname = (NSString *)cleanedAfterHostname ?: afterHostname;
+	NSString *processedAfterHostname = (__bridge NSString *)cleanedAfterHostname ?: afterHostname;
 	CFStringRef finalAfterHostname = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)processedAfterHostname, CFSTR("#[]"), NULL, kCFStringEncodingUTF8);
 	
 	// Now recreate the URL safely with the new hostname (if it was successful) instead...
-	NSArray *reconstructedArray = [NSArray arrayWithObjects:[urlParts objectAtIndex:0], [urlParts objectAtIndex:1], [urlParts objectAtIndex:3], hostname, (NSString *)finalAfterHostname, nil];
+	NSArray *reconstructedArray = [NSArray arrayWithObjects:[urlParts objectAtIndex:0], [urlParts objectAtIndex:1], [urlParts objectAtIndex:3], hostname, (__bridge NSString *)finalAfterHostname, nil];
 	NSString *reconstructedURLString = [reconstructedArray componentsJoinedByString:@""];
 
 	if (cleanedAfterHostname) CFRelease(cleanedAfterHostname);
@@ -112,7 +116,7 @@ static NSString *ConvertUnicodeURLString(NSString *str, BOOL toAscii)
 @implementation NSURL (IFUnicodeURL)
 + (NSURL *)URLWithUnicodeString:(NSString *)str
 {
-	return [[[self alloc] initWithUnicodeString:str] autorelease];
+	return [self.alloc initWithUnicodeString:str];
 }
 
 - (id)initWithUnicodeString:(NSString *)str
