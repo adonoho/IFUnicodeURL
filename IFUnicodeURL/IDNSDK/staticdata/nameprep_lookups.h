@@ -27,17 +27,13 @@ extern "C"
 
 static int lookup_charmap( DWORD dwChar, const DWORD ** ppdwBlock )
 {
-  int ii, high, low;
-
   /* { index: 0x00000041, len, c1->c4: 1, 0x00000061,0x00000000,0x00000000,0x00000000 }, */
 
   if ( ppdwBlock == 0 ) return 0;
 
   *ppdwBlock = 0;
 
-  ii    = 0;
-  low   = -1;
-  high  = CHARMAP_ENTRYCOUNT;
+  int ii = 0, high = CHARMAP_ENTRYCOUNT, low = -1;
 
   while ( high - low > 1 )
   {
@@ -92,13 +88,9 @@ static int lookup_prohbited( DWORD dwCodepoint )
 
 static int lookup_bidi_randalcat( DWORD dwCodepoint )
 {
-  int ii, high, low;
-
   if ( dwCodepoint == 0 ) return 0;
 
-  ii    = 0;
-  low   = -1;
-  high  = RANDALCAT_ENTRYCOUNT;
+  int ii = 0, high = RANDALCAT_ENTRYCOUNT, low = -1;
 
   while ( high - low > 1 )
   {
@@ -153,15 +145,11 @@ static int lookup_bidi_lcat( DWORD dwCodepoint )
 
 static int lookup_decompose( DWORD dwChar, const DWORD ** pdwzChar )
 {
-  int ii, high, low;
-
   if ( pdwzChar == 0 ) return 0;
 
   *pdwzChar = 0;
 
-  ii    = 0;
-  low   = -1;
-  high  = DECOMPOSE_ENTRYCOUNT;
+  int ii = 0, high = DECOMPOSE_ENTRYCOUNT, low = -1;
 
   while ( high - low > 1 )
   {
@@ -184,7 +172,6 @@ static int lookup_decompose( DWORD dwChar, const DWORD ** pdwzChar )
   return 0;
 }
 
-
 /*********************************************************************************
 *
 * static int lookup_composite( QWORD qwPair, DWORD * dwCodepoint )
@@ -196,13 +183,9 @@ static int lookup_decompose( DWORD dwChar, const DWORD ** pdwzChar )
 
 static int lookup_composite( QWORD qwPair, DWORD * dwCodepoint )
 {
-  int ii, high, low;
-
   if ( dwCodepoint == 0 ) return 0;
 
-  ii    = 0;
-  low   = -1;
-  high  = COMPOSE_ENTRYCOUNT;
+  int ii = 0, high = COMPOSE_ENTRYCOUNT, low = -1;
 
   while ( high - low > 1 )
   {
@@ -225,7 +208,6 @@ static int lookup_composite( QWORD qwPair, DWORD * dwCodepoint )
   return 0;
 }
 
-
 /*********************************************************************************
 *
 * static DWORD lookup_canonical( DWORD dwCodepoint )
@@ -236,13 +218,9 @@ static int lookup_composite( QWORD qwPair, DWORD * dwCodepoint )
 
 static DWORD lookup_canonical( DWORD dwCodepoint )
 {
-  int ii, high, low;
-
   if ( dwCodepoint == 0 ) return 0;
 
-  ii    = 0;
-  low   = -1;
-  high  = CANONICAL_ENTRYCOUNT;
+  int ii = 0, high = CANONICAL_ENTRYCOUNT, low = -1;
 
   while ( high - low > 1 )
   {
@@ -275,11 +253,7 @@ static DWORD lookup_canonical( DWORD dwCodepoint )
 
 static int lookup_compatible( DWORD dwCodepoint )
 {
-  int ii, high, low;
-
-  ii    = 0;
-  low   = -1;
-  high  = COMPATIBLE_ENTRYCOUNT;
+  int ii = 0, high = COMPATIBLE_ENTRYCOUNT, low = -1;
 
   while ( high - low > 1 )
   {
